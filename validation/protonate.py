@@ -121,12 +121,19 @@ def plinder_system_protonate(plinder_system_id):
     os.makedirs(output_folder, exist_ok=True)
     output_pdb = f"{output_folder}/receptor_protonated.pdb"
 
+    
+        
+
     # protonate for the receptor
-    protonate(
-        in_pdb_file=input_pdb,
-        out_pdb_file=output_pdb,
-        method="propka"
-    )
+    if not os.path.exists(output_pdb):
+        try:
+            protonate(
+                in_pdb_file=input_pdb,
+                out_pdb_file=output_pdb,
+                method="propka"
+            )
+        except Exception as e:
+            print(f"Error occurred while protonating receptor: {e}")
 
     # protonate for the ligands
     ligand_file_path = f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/ligand_files"
@@ -136,7 +143,8 @@ def plinder_system_protonate(plinder_system_id):
         ligand_sdf_path = f"{ligand_file_path}/{ligand_sdf}"
         output_ligand_sdf = f"{output_folder}/{ligand_sdf.replace('.sdf', '_protonated.sdf')}"
         
-        protonate_ligand(
-            in_sdf_file=ligand_sdf_path,
-            out_sdf_file=output_ligand_sdf
-        )
+        if not os.path.exists(output_ligand_sdf):
+            protonate_ligand(
+                in_sdf_file=ligand_sdf_path,
+                out_sdf_file=output_ligand_sdf
+            )
