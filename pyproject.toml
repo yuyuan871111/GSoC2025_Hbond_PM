@@ -1,0 +1,15 @@
+[project]
+name = "gsoc2025-hbond-pm"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "openbabel-wheel>=3.1.1.22",
+    "pdb2pqr>=3.6.2",
+    "plinder>=0.2.25",
+    "prolif",
+    "propka>=3.5.1",
+    "py3dmol>=2.5.1",
+]
+
+[tool.uv.sources]
+prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "implicit_hbond" }

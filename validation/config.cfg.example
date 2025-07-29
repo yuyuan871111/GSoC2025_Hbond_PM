@@ -1,0 +1,8 @@
+[ThirdParty]
+APBS_BIN=/path/to/APBS-1.5-linux64/bin/apbs
+MULTIVALUE_BIN=/path/to/APBS-1.5-linux64/share/apbs/tools/bin/multivalue
+PDB2PQR_BIN=/path/to/apbs/apbs/pdb2pqr-linux-bin64-2.1.1/pdb2pqr
+REDUCE_BIN=/path/to/reduce/reduce_src/reduce
+REDUCE_HET_DICT=/path/to/thirdparty/reduce/reduce_wwPDB_het_dict.txt
+MSMS_BIN=/path/to/msms/msms
+PDB2XYZRN=/path/to/msms/pdb_to_xyzrn
