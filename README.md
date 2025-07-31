@@ -32,7 +32,7 @@ Note that several types of errors might occur during the protonation (with PDB2P
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `6oug__1__1.A_1.B_1.C_1.D__1.I` (with reduce)
 
-##### 4. `ZeroDivisionError: float division by zero in in PROPKA`: This happens during PROPKA calculation.
+##### 4. `ZeroDivisionError: float division by zero in PROPKA`: This happens during PROPKA calculation.
 > Current solution: Use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `4c49__3__1.C__1.G` (with reduce).
 
