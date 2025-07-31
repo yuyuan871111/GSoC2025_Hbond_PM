@@ -36,7 +36,7 @@ Note that several types of errors might occur during the protonation (with PDB2P
 > Current solution: Use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `4c49__3__1.C__1.G` (with reduce).
 
-###### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying forc field to biomolecule states.
+###### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying force field to biomolecule states.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `1h33__1__1.A__1.D` (with reduce).
 
