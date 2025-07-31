@@ -6,10 +6,117 @@ dependencies = [
     "openbabel-wheel>=3.1.1.22",
     "pdb2pqr>=3.6.2",
     "plinder>=0.2.25",
+    "poethepoet>=0.36.0",
     "prolif",
     "propka>=3.5.1",
     "py3dmol>=2.5.1",
+    "ruff>=0.12.7",
 ]
 
 [tool.uv.sources]
 prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "implicit_hbond" }
+
+
+[tool.poe.tasks.format-check]
+help = "Checks that the code and notebooks don't require formatting"
+sequence = [
+    { cmd = "ruff format --diff" },
+]
+
+[tool.poe.tasks.lint-check]
+help = "Checks if the code requires linting"
+cmd = "ruff check --preview --diff"
+
+[tool.poe.tasks.style-check]
+help = "Runs the formatting and linting checks"
+sequence = [{ ref = "format-check" }, { ref = "lint-check" }]
+
+[tool.poe.tasks.format]
+help = "Formats the code and notebooks"
+sequence = [{ cmd = "ruff format" }]
+
+[tool.poe.tasks.lint]
+help = "Lints the code"
+cmd = "ruff check --preview --fix"
+
+[tool.poe.tasks.style-fix]
+help = "Fixes formatting and linting issues"
+sequence = [{ ref = "format" }, { ref = "lint" }]
+
+[tool.poe.tasks.type-check]
+help = "Run mypy to check type hints across the codebase"
+cmd = "mypy ${FILE_PATHS}"
+args = [{ name = "FILE_PATHS", positional = true, multiple = true, default = "." }]
+
+[tool.poe.tasks.test]
+help = "Runs the test suite"
+cmd = "pytest"
+
+[tool.ruff]
+extend-exclude = [
+    ".ipynb_checkpoints",
+    ".pytest_cache",
+    ".vscode",
+    "build",
+    "site-packages",
+]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # Warning
+    "W",
+    # pyupgrade
+    "UP",
+    # flake8
+    "B",   # bugbear
+    "SIM", # simplify
+    "A",   # builtins
+    "COM", # commas
+    "C4",  # comprehensions
+    "ISC", # implicit-str-concat
+    "ICN", # import-conventions
+    "PIE", # pie
+    "T20", # print
+    "PT",  # pytest-style
+    "Q",   # quotes
+    "RET", # return
+    "ARG", # unused-arguments
+    "PTH", # use-pathlib
+    # pandas-vet
+    "PD",
+    # pylint
+    "PLR", # refactor
+    "PLW", # warning
+    # numpy
+    "NPY",
+    # refurb
+    "FURB",
+    # ruff
+    "RUF",
+    # isort
+    "I",
+]
+ignore = [
+    "PLW1514",
+    "PTH123",
+    "PLR0904",
+    "PLR0911",
+    "PLR0913",
+    "PLR0914",
+    "PLR0915",
+    "PLR0916",
+    "PLR0917",
+    "PLR1702",
+    "PLR2004",
+    "PLR6301",
+    "PD901",
+    "PT001",
+    "PT018",
+    "FURB103",
+    "COM812",
+    "UP037",
+]
