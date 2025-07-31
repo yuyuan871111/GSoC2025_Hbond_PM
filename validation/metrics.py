@@ -6,7 +6,7 @@ NAMING_MAP = {
     "HBAcceptor": "HBA",
     "HBDonor": "HBD",
     "ImplicitHBAcceptor": "HBA",
-    "ImplicitHBDonor": "HBD"
+    "ImplicitHBDonor": "HBD",
 }
 
 
@@ -14,19 +14,19 @@ def get_interactions(df):
     "Using interaction df to get a set of interactions."
 
     interaction_set = set()
-    for each_interaction in set(df[0].index):
-        interaction_set.add((
-            each_interaction[0], 
-            each_interaction[1], 
-            NAMING_MAP.get(each_interaction[-1], each_interaction[-1])
-            ))
+    interaction_set.update(
+        (
+            each_interaction[0],
+            each_interaction[1],
+            NAMING_MAP.get(each_interaction[-1], each_interaction[-1]),
+        )
+        for each_interaction in set(df[0].index)
+    )
 
     return interaction_set
 
 
-def confusion_matrix(
-    explicit_set, implicit_set
-):
+def confusion_matrix(explicit_set, implicit_set):
     """
     Plot a confusion matrix of explicit and implicit interactions.
     """
@@ -34,34 +34,31 @@ def confusion_matrix(
     only_explicit = explicit_set - intersection
     only_implicit = implicit_set - intersection
 
-    matrix = np.array([
-        [len(intersection), len(only_explicit)],
-        [len(only_implicit), 0]
-    ])
+    return np.array([[len(intersection), len(only_explicit)], [len(only_implicit), 0]])
 
-    return matrix
 
 def plot_confusion_matrix(
-        matrix, 
-        title="Confusion Matrix of Explicit and Implicit Hbond Interactions",
-    ):
+    matrix,
+    title="Confusion Matrix of Explicit and Implicit Hbond Interactions",
+):
     fig, ax = plt.subplots(dpi=300)
-    cax = ax.imshow(matrix, cmap='Oranges')
+    cax = ax.imshow(matrix, cmap="Oranges")
     fig.colorbar(cax)
 
     ax.set_xticks(np.arange(2))
     ax.set_yticks(np.arange(2))
-    ax.set_xticklabels(['Detected by', 'Not Detected by'])
-    ax.set_yticklabels(['Detected by', 'Not Detected by'])
+    ax.set_xticklabels(["Detected by", "Not Detected by"])
+    ax.set_yticklabels(["Detected by", "Not Detected by"])
 
     for (i, j), val in np.ndenumerate(matrix):
-        ax.text(j, i, val, ha='center', va='center')
+        ax.text(j, i, val, ha="center", va="center")
 
     ax.set_title(title)
-    ax.set_xlabel('Implicit Method')
-    ax.set_ylabel('Explicit Method')
+    ax.set_xlabel("Implicit Method")
+    ax.set_ylabel("Explicit Method")
 
     return fig, ax
+
 
 def tanimoto_coefficient(set1, set2):
     """
@@ -72,6 +69,7 @@ def tanimoto_coefficient(set1, set2):
     if union == 0:
         return 1  # No interactions by either method (correct)
     return intersection / union
+
 
 def tanimoto_coefficient_by_confusion_matrix(matrix):
     """
