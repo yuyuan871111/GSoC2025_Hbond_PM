@@ -26,7 +26,7 @@ Note that several types of errors might occur during the protonation (with PDB2P
 ##### 2. `Too few atoms present to reconstruct or cap residue`: This happens if there is only 1 heavy atoms in a terminus residue in the topology file.
 > Current solution: Try to trim that specific residue and protonate again. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER validation set: `2bo7__2__1.H__1.Y_1.Z`, `3fcs__2__1.C_1.D__1.N`, `5ab0__2__1.B__1.T`, `1o7a__3__2.E__2.K`, `1oi6__1__1.A_1.B__1.D`
-* In PLINDER test set: [TODO] `3ek5__1__1.A_1.C_1.D_1.E_1.F__1.K_1.L` (with reduce), `4og7__1__1.A__1.C`, `2w0w__1__3.A__3.B`, `2iut__1__1.A_1.B__1.E_1.F` (with reduce), `3bos__1__1.A_1.B__1.M_1.P_1.U` (with reduce), `1h3c__1__2.B__2.G`, `1h36__1__2.B__2.G`, `1w2x__1__1.A_2.A__2.D` (with reduce), `2y38__1__1.A__1.B`, `2bs2__1__1.C_1.E_1.F__1.V_1.W` (with reduce), `2bs3__1__1.C_1.E_1.F__1.V_1.W` (with reduce).
+* In PLINDER test set: `3ek5__1__1.A_1.C_1.D_1.E_1.F__1.K_1.L` (with reduce), `4og7__1__1.A__1.C`, `2w0w__1__3.A__3.B`, `2iut__1__1.A_1.B__1.E_1.F` (with reduce), `3bos__1__1.A_1.B__1.M_1.P_1.U` (with reduce), `1h3c__1__2.B__2.G`, `1h36__1__2.B__2.G`, `1w2x__1__1.A_2.A__2.D` (with reduce), `2y38__1__1.A__1.B`, `2bs2__1__1.C_1.E_1.F__1.V_1.W` (with reduce), `2bs3__1__1.C_1.E_1.F__1.V_1.W` (with reduce).
 
 ##### 3. `Biomolecular structure is incomplete:  Found gap in biomolecule structure`:  This happens during biomolecule debumping.
 > Current solution: try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
