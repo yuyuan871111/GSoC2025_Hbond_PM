@@ -168,11 +168,44 @@ def check_errors(log_file):
 
         return {
             "log_file": log_file,
+            "raw_error_msg": lines,
             "error_msg": [line.strip() for line in lines if "CRITICAL:" in line],
         }
 
 
+def try_protonate_with_reduce(
+    input_pdb: str,
+    output_pdb: str,
+):
+    """
+    Try to protonate a system with reduce.
+    If it fails, it will try to protonate with propka.
+    """
+    try:
+        print("Trying to protonate with reduce.")  # noqa: T201
+        protonate(in_pdb_file=input_pdb, out_pdb_file=output_pdb, method="reduce")
+        print("Protonation with reduce was successful.")  # noqa: T201
+        return
+
+    except Exception as e:
+        print(f"[TODO] Protonation with reduce failed: {e}")  # noqa: T201
+        return
+
+
 def error_handler(errors: dict, output_pdb: str | None = None):
+    plinder_system_id = errors["log_file"].split("/")[-3]
+    input_pdb = f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor.pdb"
+
+    # If not the error from PDB2PQR (or said from PROPKA)
+    # Try to protonate with reduce
+    if errors.get("error_msg", []) == []:
+        try_protonate_with_reduce(
+            input_pdb=input_pdb,
+            output_pdb=output_pdb,
+        )
+
+    # If the error is from PDB2PQR
+    # Check the error message and handle accordingly
     for error_msg in errors.get("error_msg", []):
         if "Too few atoms present to reconstruct or cap residue" in error_msg:
             print(  # noqa: T201
@@ -185,11 +218,7 @@ def error_handler(errors: dict, output_pdb: str | None = None):
             chain = residue[1]
             resid = residue[2]
 
-            plinder_system_id = errors["log_file"].split("/")[-3]
-            raw_file_path = (
-                f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor.pdb"
-            )
-            u = mda.Universe(raw_file_path)
+            u = mda.Universe(input_pdb)
 
             trimed_file_path = (
                 f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor_trim.pdb"
@@ -212,31 +241,42 @@ def error_handler(errors: dict, output_pdb: str | None = None):
                 )
                 print("Protonation with propka was successful after trimming.")  # noqa: T201
                 return
+
             except Exception as e:
                 print(f"Protonation with propka after trimming failed: {e}")  # noqa: T201
+                try_protonate_with_reduce(
+                    input_pdb=trimed_file_path,
+                    output_pdb=output_pdb,
+                )
                 return
 
-        elif "cannot convert float NaN to integer" in error_msg:
+        elif (
+            "cannot convert float NaN to integer" in error_msg
+            or "from integral, exceeding error tolerance" in error_msg
+            or "Biomolecular structure is incomplete" in error_msg
+        ):
             try:
                 print("Trying to protonate with propka without optimization.")  # noqa: T201
-                plinder_system_id = errors["log_file"].split("/")[-3]
-                input_pdb = (
-                    f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor.pdb"
-                )
                 protonate_with_propka_without_opt(
                     in_pdb_file=input_pdb, out_pdb_file=output_pdb
                 )
                 print("Protonation with propka without optimization was successful.")  # noqa: T201
                 return
+
             except Exception as e:
                 print(f"Protonation with propka without optimization failed: {e}")  # noqa: T201
+                try_protonate_with_reduce(
+                    input_pdb=input_pdb,
+                    output_pdb=output_pdb,
+                )
                 return
 
         else:
-            print(f"Cannot handle this error yet: {error_msg}.")  # noqa: T201
+            print(f"[TODO] Cannot handle this error yet: {error_msg}.")  # noqa: T201
+            return
 
 
-def plinder_system_protonate(plinder_system_id):
+def plinder_system_protonate(plinder_system_id, p_method="propka"):
     # I/O
     # input_pdb = plinder_system.receptor_pdb
     input_pdb = f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor.pdb"
@@ -250,7 +290,7 @@ def plinder_system_protonate(plinder_system_id):
     # protonate for the receptor
     if not pathlib.Path(output_pdb).exists():
         try:
-            protonate(in_pdb_file=input_pdb, out_pdb_file=output_pdb, method="propka")
+            protonate(in_pdb_file=input_pdb, out_pdb_file=output_pdb, method=p_method)
         except Exception as e:
             print(f"Error occurred while protonating receptor: {e}")  # noqa: T201
             e_log_file = (
