@@ -7,3 +7,7 @@ config.cfg
 # cache
 *.pyc
 __pycache__
+
+# data and results
+validation/test
+validation/val
