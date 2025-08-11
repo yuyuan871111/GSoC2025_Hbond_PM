@@ -1,0 +1,4 @@
+[ThirdParty]
+PDB2PQR_BIN=pdb2pqr
+PROPKA3_BIN=propka3
+REDUCE_BIN=/path/to/reduce/reduce_src/reduce

@@ -1,6 +1,6 @@
 import pandas as pd
-from protonate import plinder_system_protonate
 from tqdm import tqdm
+from utils.protonate import plinder_system_protonate
 
 df = pd.read_csv("plinder_test_systems.csv")
 
