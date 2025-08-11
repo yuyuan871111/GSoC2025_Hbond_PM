@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 cfg = plinder.core.get_config()
 
-df_index = pd.read_csv("plinder_val_systems.csv")
+df_index = pd.read_csv("./data/plinder_val_systems.csv")
 
 protein_helper = ProteinHelper(
     [

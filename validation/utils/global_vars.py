@@ -26,5 +26,6 @@ if "PDB2PQR_BIN" in config["ThirdParty"]:
 else:
     print("Warning: PDB2PQR_BIN not set. Variable should point to PDB2PQR_BIN program.")  # noqa: T201
 
+
 class NoSolutionError(Exception):
     pass

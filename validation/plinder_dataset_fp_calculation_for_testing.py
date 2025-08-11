@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 cfg = plinder.core.get_config()
 
-df_index = pd.read_csv("plinder_test_systems.csv")
+df_index = pd.read_csv("./data/plinder_test_systems.csv")
 
 protein_helper = ProteinHelper(
     [
@@ -130,17 +130,9 @@ for idx in tqdm(df_index.index):
             parameters={
                 "ImplicitHBDonor": {
                     "include_water": True,  # include water molecules
-                    "tolerance_dev_aaa": 60,  # for acceptor atom
-                    "tolerance_dev_daa": 60,  # for donor atom
-                    "tolerance_dev_dpa": 60,  # for donor plane
-                    "tolerance_dev_apa": 90,  # for acceptor plane
                 },
                 "ImplicitHBAcceptor": {
                     "include_water": True,  # include water molecules
-                    "tolerance_dev_aaa": 60,  # for acceptor atom
-                    "tolerance_dev_daa": 60,  # for donor atom
-                    "tolerance_dev_dpa": 60,  # for donor plane
-                    "tolerance_dev_apa": 90,  # for acceptor plane
                 },
             },
         )
