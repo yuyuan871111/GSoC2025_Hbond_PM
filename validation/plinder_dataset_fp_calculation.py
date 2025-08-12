@@ -92,9 +92,10 @@ for idx in tqdm(df_index.index):
     try:
         # [explicit hbond calculation]
         # Calculate explicit hydrogen bonds
-        fp = plf.Fingerprint(["HBDonor", "HBAcceptor"], count=True)
-        fp.run_from_iterable([ligand], protein_mol, progress=False)
-        fp.to_pickle(f"./val/explicit/fp_{idx}.pkl")
+        if not pathlib.Path(f"./val/explicit/fp_{idx}.pkl").exists():
+            fp = plf.Fingerprint(["HBDonor", "HBAcceptor"], count=True)
+            fp.run_from_iterable([ligand], protein_mol, progress=False)
+            fp.to_pickle(f"./val/explicit/fp_{idx}.pkl")
 
         # [implicit hbond calculation]
         # Remove hydrogens from the protein and ligand
@@ -104,28 +105,33 @@ for idx in tqdm(df_index.index):
         )
 
         # Calculate implicit hydrogen bonds
-        fp = plf.Fingerprint(
-            ["ImplicitHBDonor", "ImplicitHBAcceptor"],
-            count=True,
-            parameters={
-                "ImplicitHBDonor": {
-                    "include_water": True,  # include water molecules
-                    "tolerance_dev_aaa": 60,  # for acceptor atom
-                    "tolerance_dev_daa": 60,  # for donor atom
-                    "tolerance_dev_dpa": 60,  # for donor plane
-                    "tolerance_dev_apa": 90,  # for acceptor plane
+        if not pathlib.Path(f"./val/implicit/fp_{idx}.pkl").exists():
+            fp = plf.Fingerprint(
+                ["ImplicitHBDonor", "ImplicitHBAcceptor"],
+                count=True,
+                parameters={
+                    "ImplicitHBDonor": {
+                        "include_water": True,  # include water molecules
+                        "tolerance_dev_aaa": 60,  # for acceptor atom
+                        "tolerance_dev_daa": 60,  # for donor atom
+                        "tolerance_dev_dpa": 60,  # for donor plane
+                        "tolerance_dev_apa": 90,  # for acceptor plane
+                        "vina_hbond_potential_g": -0.7,
+                        "vina_hbond_potential_b": 0.4,
+                    },
+                    "ImplicitHBAcceptor": {
+                        "include_water": True,  # include water molecules
+                        "tolerance_dev_aaa": 60,  # for acceptor atom
+                        "tolerance_dev_daa": 60,  # for donor atom
+                        "tolerance_dev_dpa": 60,  # for donor plane
+                        "tolerance_dev_apa": 90,  # for acceptor plane
+                        "vina_hbond_potential_g": -0.7,
+                        "vina_hbond_potential_b": 0.4,
+                    },
                 },
-                "ImplicitHBAcceptor": {
-                    "include_water": True,  # include water molecules
-                    "tolerance_dev_aaa": 60,  # for acceptor atom
-                    "tolerance_dev_daa": 60,  # for donor atom
-                    "tolerance_dev_dpa": 60,  # for donor plane
-                    "tolerance_dev_apa": 90,  # for acceptor plane
-                },
-            },
-        )
-        fp.run_from_iterable([ligand_i], protein_mol_i, progress=False)
-        fp.to_pickle(f"./val/implicit/fp_{idx}.pkl")
+            )
+            fp.run_from_iterable([ligand_i], protein_mol_i, progress=False)
+            fp.to_pickle(f"./val/implicit/fp_{idx}.pkl")
 
     except Exception as e:
         print("DEBUG later:")  # noqa: T201

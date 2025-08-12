@@ -71,6 +71,28 @@ def tanimoto_coefficient(set1, set2):
     return intersection / union
 
 
+def positive_predictive_value(true_set, predicted_set):
+    """
+    Compute the Positive Predictive Value (PPV) between two sets.
+    """
+    true_positives = len(true_set.intersection(predicted_set))
+    false_positives = len(predicted_set - true_set)
+    if true_positives + false_positives == 0:
+        return 1  # No positive predictions (correct)
+    return true_positives / (true_positives + false_positives)
+
+
+def sensitivity(true_set, predicted_set):
+    """
+    Compute the Sensitivity between two sets.
+    """
+    true_positives = len(true_set.intersection(predicted_set))
+    false_negatives = len(true_set - predicted_set)
+    if true_positives + false_negatives == 0:
+        return 1  # No actual positives (correct)
+    return true_positives / (true_positives + false_negatives)
+
+
 def tanimoto_coefficient_by_confusion_matrix(matrix):
     """
     Compute the Tanimoto coefficient from a confusion matrix.

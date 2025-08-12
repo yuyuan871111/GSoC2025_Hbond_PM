@@ -4,17 +4,70 @@ Project Management repository for GSoC 2025 - MDAnalysis x ProLIF Project 5:  H-
 
 Project outline: [link](https://summerofcode.withgoogle.com/programs/2025/projects/5Otkx8vp)
 
-## Validation with PLINDER dataset
-Implicit Hbond method is currently validated by explicit Hbond method using PLINDER dataset.
+## Environment installation 
+Recommended Python:  3.11 or above
+Prerequirement: The python packages are managed with [uv](https://docs.astral.sh/uv/). Please follow the official guide to install `uv`.
 
-### Dataset preparation
-First, the receptor (protein) and ligand are protonated using PDB2PQR (PROPKA).
+Once `uv` is installed, you can clone our repository and synchronize the environment with below code:
+```bash
+git clone https://github.com/yuyuan871111/GSoC2025_Hbond_PM.git
+
+cd GSoC2025_Hbond_PM
+
+uv sync --python 3.11
+```
+
+## Quick start
+Look at the `HBond valiadtion - Case study` in this [notebook](./validation/plinder_dataset_validation.ipynb).
+
+For more analyses, you will need to download PLINDER dataset and prepare the protonated structures. See below session for details.
+
+## Validation with PLINDER dataset
+Implicit H-bond method is currently validated by explicit H-bond method using PLINDER validation (n ~= 1100) and testing (n ~= 1400) datasets (v2).
+
+Here is the workflow to reproduce our validation:
+
+### 1. Dataset preparation
+First of all, the receptor (protein) and ligand will need to be downloaded to your local machine. Learn how to download the data from [PLINDER documentation](https://www.plinder.sh/).
+
+Then, receptors are protonated using PDB2PQR (PROPKA), and hydrogens are added to ligands using openbabel. You can simply run the below scripts:
 ```bash
 cd validation
 
-uv run python plinder_dataset_protonate.py
+uv run python plinder_dataset_protonate.py # for the PLINDER validation/test set
 ```
-#### Troubleshooting
+Note that if you want to protonate your structures in the validation set, please modify the path of dataframe in `plinder_dataset_protonate.py`. For example:
+```python
+...
+
+df = pd.read_csv("./data/plinder_val_systems.csv") # PLINDER validation set
+
+...
+```
+It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#dataset-preparation-protonation)).
+
+Once the dataset preparation finished, you can follow our steps to compute the H-bond interactions using implicit and explicit methods.
+
+### 2. Calculating H-bond interactions
+```bash
+cd validation
+
+mkdir -p ./val/explicit
+mkdir -p ./val/implicit
+mkdir -p ./test/explicit
+mkdir -p ./test/implicit
+
+uv run python plinder_dataset_fp_calculation.py # for the PLINDER validation set
+uv run python plinder_dataset_fp_calculation_for_testing.py # for the PLINDER testing set
+```
+
+### 3. Setting the thresholds for the implicit H-bond methods using PLINDER validation set (test the performance on PLINDER testing set)
+* Decide the thresholds: The comparison and analyses are performed in [this jupyter notebook](./validation/plinder_dataset_validation.ipynb) (Batch analysis).
+* Test the performance if applying new thresholds: See [this notebook](./validation/plinder_dataset_test.ipynb).
+
+
+### Troubleshooting
+#### Dataset preparation (protonation)
 Note that several types of errors might occur during the protonation (with PDB2PQR).
 ##### 1. `cannot convert float NaN to integer`: This happens during hydrogen optimization.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
@@ -39,7 +92,3 @@ Note that several types of errors might occur during the protonation (with PDB2P
 ###### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying force field to biomolecule states.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `1h33__1__1.A__1.D` (with reduce).
-
-
-### Methodology validation
-Then, the comparison and analyses are performed in a jupyter notebook (see details in  `validation/plinder_dataset_validation.ipynb`).

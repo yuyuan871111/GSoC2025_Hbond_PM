@@ -112,9 +112,10 @@ for idx in tqdm(df_index.index):
     try:
         # [explicit hbond calculation]
         # Calculate explicit hydrogen bonds
-        fp = plf.Fingerprint(["HBDonor", "HBAcceptor"], count=True)
-        fp.run_from_iterable([ligand], protein_mol, progress=False)
-        fp.to_pickle(f"./test/explicit/fp_{idx}.pkl")
+        if not pathlib.Path(f"./test/explicit/fp_{idx}.pkl").exists():
+            fp = plf.Fingerprint(["HBDonor", "HBAcceptor"], count=True)
+            fp.run_from_iterable([ligand], protein_mol, progress=False)
+            fp.to_pickle(f"./test/explicit/fp_{idx}.pkl")
 
         # [implicit hbond calculation]
         # Remove hydrogens from the protein and ligand
@@ -124,20 +125,21 @@ for idx in tqdm(df_index.index):
         )
 
         # Calculate implicit hydrogen bonds
-        fp = plf.Fingerprint(
-            ["ImplicitHBDonor", "ImplicitHBAcceptor"],
-            count=True,
-            parameters={
-                "ImplicitHBDonor": {
-                    "include_water": True,  # include water molecules
+        if not pathlib.Path(f"./test/implicit/fp_{idx}.pkl").exists():
+            fp = plf.Fingerprint(
+                ["ImplicitHBDonor", "ImplicitHBAcceptor"],
+                count=True,
+                parameters={
+                    "ImplicitHBDonor": {
+                        "include_water": True,  # include water molecules
+                    },
+                    "ImplicitHBAcceptor": {
+                        "include_water": True,  # include water molecules
+                    },
                 },
-                "ImplicitHBAcceptor": {
-                    "include_water": True,  # include water molecules
-                },
-            },
-        )
-        fp.run_from_iterable([ligand_i], protein_mol_i, progress=False)
-        fp.to_pickle(f"./test/implicit/fp_{idx}.pkl")
+            )
+            fp.run_from_iterable([ligand_i], protein_mol_i, progress=False)
+            fp.to_pickle(f"./test/implicit/fp_{idx}.pkl")
 
     except Exception as e:
         print("DEBUG later:")  # noqa: T201
