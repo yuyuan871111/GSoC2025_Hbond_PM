@@ -15,7 +15,8 @@ from time import strftime
 
 import MDAnalysis as mda
 import plinder.core.utils.config
-from global_vars import pdb2pqr_bin, reduce_bin
+
+from .global_vars import pdb2pqr_bin, reduce_bin
 
 cfg = plinder.core.get_config()
 
@@ -192,7 +193,7 @@ def try_protonate_with_reduce(
         return
 
 
-def error_handler(errors: dict, output_pdb: str | None = None):
+def plinder_error_handler(errors: dict, output_pdb: str | None = None):
     plinder_system_id = errors["log_file"].split("/")[-3]
     input_pdb = f"{cfg.data.plinder_dir}/systems/{plinder_system_id}/receptor.pdb"
 
@@ -298,7 +299,7 @@ def plinder_system_protonate(plinder_system_id, p_method="propka"):
                 "receptor_protonated.log"
             )
             errors = check_errors(e_log_file)
-            error_handler(errors, output_pdb=output_pdb)
+            plinder_error_handler(errors, output_pdb=output_pdb)
 
     # protonate for the ligands
     ligand_file_path = (
@@ -315,3 +316,22 @@ def plinder_system_protonate(plinder_system_id, p_method="propka"):
             protonate_ligand(
                 in_sdf_file=ligand_sdf_path, out_sdf_file=output_ligand_sdf
             )
+
+
+def pinder_system_protonate(input_pdb: pathlib.Path, p_method="propka"):
+    # I/O
+    output_folder = input_pdb.parent.parent / f"protonated_{input_pdb.parent.stem}"
+    filename = input_pdb.stem
+    output_pdb = f"{output_folder}/{filename}_protonated.pdb"
+
+    # protonate for the receptor
+    if not pathlib.Path(output_pdb).exists():
+        try:
+            protonate(
+                in_pdb_file=str(input_pdb),
+                out_pdb_file=str(output_pdb),
+                method=p_method,
+            )
+
+        except Exception as e:
+            print(f"Error occurred while protonating receptor: {e}")  # noqa: T201

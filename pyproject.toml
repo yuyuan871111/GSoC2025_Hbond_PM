@@ -5,6 +5,7 @@ requires-python = ">=3.10"
 dependencies = [
     "openbabel-wheel>=3.1.1.22",
     "pdb2pqr>=3.6.2",
+    "pinder>=0.5.0",
     "plinder>=0.2.25",
     "poethepoet>=0.36.0",
     "prolif",
