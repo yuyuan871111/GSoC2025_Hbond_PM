@@ -47,7 +47,7 @@ df = pd.read_csv("./data/plinder_val_systems.csv") # PLINDER validation set
 
 ...
 ```
-It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#dataset-preparation-protonation)).
+It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#plinder-dataset-preparation-protonation)).
 
 Once the dataset preparation finished, you can follow our steps to compute the H-bond interactions using implicit and explicit methods.
 
@@ -123,6 +123,6 @@ Note that several types of errors might occur during the protonation (with PDB2P
 > Current solution: Use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `4c49__3__1.C__1.G` (with reduce).
 
-##### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying force field to biomolecule states.
+#### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying force field to biomolecule states.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `1h33__1__1.A__1.D` (with reduce).
