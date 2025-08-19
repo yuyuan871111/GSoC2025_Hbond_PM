@@ -11,4 +11,6 @@ __pycache__
 # data and results
 validation/test
 validation/val
+validation/pinder_test
+validation/pinder_val
 validation/data/*local_paths.pkl

@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "implicit_hbond" }
+prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "326f84880685155d28f8c427bb32102ce95ec3be" }
 
 
 [tool.poe.tasks.format-check]
