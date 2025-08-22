@@ -335,3 +335,96 @@ def pinder_system_protonate(input_pdb: pathlib.Path, p_method="propka"):
 
         except Exception as e:
             print(f"Error occurred while protonating receptor: {e}")  # noqa: T201
+            e_log_file = (
+                f"{e.args[0].split('Check log file in ')[-1].strip()}/"
+                f"{filename}_protonated.log"
+            )
+            errors = check_errors(e_log_file)
+            pinder_error_handler(
+                errors,
+                input_pdb=input_pdb,
+                output_pdb=str(output_pdb),
+            )
+
+
+def pinder_error_handler(
+    errors: dict,
+    input_pdb: pathlib.Path,
+    output_pdb: str | None = None,
+):
+    filename = input_pdb.stem
+    # If not the error from PDB2PQR (or said from PROPKA)
+    # Try to protonate with reduce
+    if errors.get("error_msg", []) == []:
+        try_protonate_with_reduce(
+            input_pdb=str(input_pdb),
+            output_pdb=output_pdb,
+        )
+
+    # If the error is from PDB2PQR
+    # Check the error message and handle accordingly
+    for error_msg in errors.get("error_msg", []):
+        if "Too few atoms present to reconstruct or cap residue" in error_msg:
+            print(  # noqa: T201
+                "Trimming the receptor to remove residue with too many missing "
+                "heavy atoms."
+            )
+            temp = error_msg.split("Heavy atoms missing from ")[1]
+            residue = temp.split(":")[0].split(" ")
+            resname = residue[0]
+            chain = residue[1]
+            resid = residue[2]
+
+            u = mda.Universe(str(input_pdb))
+
+            trimed_file_path = str(input_pdb.parent / f"{filename}_trim.pdb")
+            u.select_atoms(
+                f"not (resname {resname} and segid {chain} and resid {resid})"
+            ).write(trimed_file_path)
+
+            print(  # noqa: T201
+                f"Trimmed {resname} {chain} {resid} from {filename}.pdb."
+            )
+
+            try:
+                print("Trying to protonate with propka after trimming.")  # noqa: T201
+                protonate(
+                    in_pdb_file=trimed_file_path,
+                    out_pdb_file=output_pdb,
+                    method="propka",
+                )
+                print("Protonation with propka was successful after trimming.")  # noqa: T201
+                return
+
+            except Exception as e:
+                print(f"Protonation with propka after trimming failed: {e}")  # noqa: T201
+                try_protonate_with_reduce(
+                    input_pdb=trimed_file_path,
+                    output_pdb=output_pdb,
+                )
+                return
+
+        elif (
+            "cannot convert float NaN to integer" in error_msg
+            or "from integral, exceeding error tolerance" in error_msg
+            or "Biomolecular structure is incomplete" in error_msg
+        ):
+            try:
+                print("Trying to protonate with propka without optimization.")  # noqa: T201
+                protonate_with_propka_without_opt(
+                    in_pdb_file=str(input_pdb), out_pdb_file=output_pdb
+                )
+                print("Protonation with propka without optimization was successful.")  # noqa: T201
+                return
+
+            except Exception as e:
+                print(f"Protonation with propka without optimization failed: {e}")  # noqa: T201
+                try_protonate_with_reduce(
+                    input_pdb=str(input_pdb),
+                    output_pdb=output_pdb,
+                )
+                return
+
+        else:
+            print(f"[TODO] Cannot handle this error yet: {error_msg}.")  # noqa: T201
+            return

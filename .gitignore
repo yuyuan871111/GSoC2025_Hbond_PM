@@ -8,6 +8,9 @@ config.cfg
 *.pyc
 __pycache__
 
+# logs
+*.log
+
 # data and results
 validation/test
 validation/val

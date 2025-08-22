@@ -50,6 +50,40 @@ protein_helper = ProteinHelper(
             "IML": {"SMILES": "CC[C@H](C)[C@@H](C(=O))NC"},
             "I2M": {"SMILES": "CCC(C)(C)[C@@H](C(=O))N"},
             "MGN": {"SMILES": "C[C@](CCC(=O)N)(C(=O))N"},
+            "CME": {"SMILES": "C(CSSC[C@@H](C(=O))N)O"},
+            "MLZ": {"SMILES": "CNCCCC[C@@H](C(=O))N"},
+            "LLP": {"SMILES": "Cc1c(c(c(cn1)COP(=O)(O)O)/C=N/CCCCC(C(=O))N)O"},
+            "DAL": {"SMILES": "C[C@H](C(=O))N"},
+            "DDZ": {"SMILES": "[C@H](C(O)O)(C(=O))N"},
+            "LP6": {"SMILES": "C1CCN(CC1)CCCC[C@@H](C(=O))N"},
+            "CSX": {"SMILES": "C([C@@H](C(=O))N)[S@H]=O"},
+            "NEP": {"SMILES": "c1c(ncn1P(=O)(O)O)C[C@@H](C(=O))N"},
+            "5VV": {"SMILES": "C([C@@H](C(=O)O)NC(=O))C(=O)N"},
+            "2CO": {"SMILES": "C([C@@H](C(=O))N)SOO"},
+            "CSA": {"SMILES": "CC(=O)CSC[C@@H](C(=O))N"},
+            "MLY": {"SMILES": "CN(C)CCCC[C@@H](C(=O))N"},
+            "LYR": {
+                "SMILES": (
+                    "CC1=C(C(CCC1)(C)C)"
+                    r"C=C/C(=C/C=C\\C(=C\\CNCCCC[C@@H](C(=O))N)\\C)/C"
+                )
+            },
+            "FGP": {"SMILES": "[C@H]([C@@H](O)OP(=O)(O)O)(C(=O))N"},
+            "CAS": {"SMILES": "C[As](C)SC[C@@H](C(=O))N"},
+            "SCH": {"SMILES": "CSSC[C@@H](C(=O))N"},
+            "V44": {"SMILES": "Cn1ccnc1C(CSC[C@@H](C(=O))N)c2nccn2C"},
+            "SEB": {"SMILES": "c1ccc(cc1)CS(=O)(=O)OC[C@@H](C(=O))N"},
+            "IYR": {"SMILES": "c1cc(c(cc1C[C@@H](C(=O))N)I)O"},
+            "OHI": {"SMILES": "C1=NC(=O)N=C1C[C@@H](C(=O))N"},
+            "CSS": {"SMILES": "C([C@@H](C(=O))N)SS"},
+            "CR2": {
+                "SMILES": r"c1cc(ccc1\\C=C/2\\C(=O)N(C(=N2)CN)CC(=O))O"
+            },  # need check
+            "TYI": {"SMILES": "c1c(cc(c(c1I)O)I)C[C@@H](C(=O))N"},
+            "CSD": {"SMILES": "C([C@@H](C(=O))N)[S@@](=O)O"},
+            "MSO": {"SMILES": "C[Se@@](=O)CC[C@@H](C(=O))N"},
+            "2ML": {"SMILES": "CC(C)C[C@@](C)(C(=O))N"},
+            "R1A": {"SMILES": "CC1(C=C(C([N+]1=O)(C)C)CSSC[C@@H](C(=O))N)C"},
         },
     ]
 )

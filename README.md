@@ -47,7 +47,7 @@ df = pd.read_csv("./data/plinder_val_systems.csv") # PLINDER validation set
 
 ...
 ```
-It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#plinder-dataset-preparation-protonation)).
+It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#plinderpinder-dataset-preparation-protonation)).
 
 Once the dataset preparation finished, you can follow our steps to compute the H-bond interactions using implicit and explicit methods.
 
@@ -76,7 +76,6 @@ Similar to the validation with PLINDER dataset, we followed the same protocols.
 cd validation
 
 uv run python pinder_dataset_protonate.py # for the PINDER validation set
-
 uv run python pinder_dataset_protonate_for_testing.py # for the PINDER testing set
 ```
 
@@ -85,6 +84,7 @@ uv run python pinder_dataset_protonate_for_testing.py # for the PINDER testing s
 ```bash
 cd validation
 
+# create the output folder
 mkdir -p ./pinder_val/explicit
 mkdir -p ./pinder_val/implicit
 mkdir -p ./pinder_test/explicit
@@ -101,28 +101,33 @@ uv run python pinder_dataset_fp_calculation_for_testing.py # for the PINDER test
 
 
 ## Troubleshooting
-### PLINDER Dataset preparation (protonation)
+### PLINDER/PINDER Dataset preparation (protonation)
 Note that several types of errors might occur during the protonation (with PDB2PQR).
 #### 1. `cannot convert float NaN to integer`: This happens during hydrogen optimization.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER validation set: `1ho4__1__1.B_2.C__1.G_1.H`, `2nws__1__1.A_1.B__1.C_1.D`, `2nws__1__2.A_2.B__2.C_2.D`, `2cth__1__1.A__1.C_1.E_1.F`, `5kod__4__1.D__1.M_1.N`
 * In PLINDER test set: `5ayc__1__2.A_3.A__2.B_2.C` (with reduce), 
 `5fux__1__1.A__1.C_1.E_1.F`, `6b63__1__1.A_1.B__1.D_1.E_1.F_1.I_1.L` (with reduce), `3n5h__1__2.A__2.B_2.D` (with reduce), `3was__1__2.A_3.A__2.C_2.E` (with reduce), `7ow2__1__1.A_1.C_1.E_1.G__1.E_1.G`, `2yr6__1__1.A__1.D_1.E_1.F`.
+* IN PINDER validation set: ... (some)
 
 
 #### 2. `Too few atoms present to reconstruct or cap residue`: This happens if there is only 1 heavy atoms in a terminus residue in the topology file.
 > Current solution: Try to trim that specific residue and protonate again. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER validation set: `2bo7__2__1.H__1.Y_1.Z`, `3fcs__2__1.C_1.D__1.N`, `5ab0__2__1.B__1.T`, `1o7a__3__2.E__2.K`, `1oi6__1__1.A_1.B__1.D`
 * In PLINDER test set: `3ek5__1__1.A_1.C_1.D_1.E_1.F__1.K_1.L` (with reduce), `4og7__1__1.A__1.C`, `2w0w__1__3.A__3.B`, `2iut__1__1.A_1.B__1.E_1.F` (with reduce), `3bos__1__1.A_1.B__1.M_1.P_1.U` (with reduce), `1h3c__1__2.B__2.G`, `1h36__1__2.B__2.G`, `1w2x__1__1.A_2.A__2.D` (with reduce), `2y38__1__1.A__1.B`, `2bs2__1__1.C_1.E_1.F__1.V_1.W` (with reduce), `2bs3__1__1.C_1.E_1.F__1.V_1.W` (with reduce).
+* IN PINDER validation set: `2jbx__A1_Q85295-R.pdb`, `2jbx__B1_Q85295-L.pdb`, `2wmp__A1_Q1R2W9-R.pdb`, ... (a lot)
 
 #### 3. `Biomolecular structure is incomplete:  Found gap in biomolecule structure`:  This happens during biomolecule debumping.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `6oug__1__1.A_1.B_1.C_1.D__1.I` (with reduce)
+* IN PINDER validation set: ... (some)
 
 #### 4. `ZeroDivisionError: float division by zero in PROPKA`: This happens during PROPKA calculation.
 > Current solution: Use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `4c49__3__1.C__1.G` (with reduce).
+* IN PINDER validation set: ... (some)
 
 #### 5. `-9.4 deviates by 0.40000000000000036 from integral, exceeding error tolerance 0.001`: This happens when applying force field to biomolecule states.
 > Current solution: Try to protonate with flag `--noopt`. If still not working, use "reduce" instead (however, the water molecules will be removed and HIS is always HIP).
 * In PLINDER test set: `1h33__1__1.A__1.D` (with reduce).
+* IN PINDER validation set: ... (some)
