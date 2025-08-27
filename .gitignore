@@ -17,3 +17,6 @@ validation/val
 validation/pinder_test
 validation/pinder_val
 validation/data/*local_paths.pkl
+test_data/*_ligand.pdb
+test_data/*_protein.pdb
+test_data/*model_0.pdb

@@ -3,6 +3,7 @@ name = "gsoc2025-hbond-pm"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
+    "gemmi>=0.7.3",
     "openbabel-wheel>=3.1.1.22",
     "pdb2pqr>=3.6.2",
     "pinder>=0.5.0",
@@ -15,7 +16,7 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "326f84880685155d28f8c427bb32102ce95ec3be" }
+prolif = { git = "https://github.com/yuyuan871111/ProLIF.git", branch = "c3a7f31af926ad84c15a914a7877fb40db6af432" }
 
 
 [tool.poe.tasks.format-check]
