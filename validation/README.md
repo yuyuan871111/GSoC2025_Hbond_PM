@@ -1,19 +1,24 @@
 ## Validation with PLINDER dataset
-Implicit H-bond method is currently validated by explicit H-bond method using PLINDER validation (n ~= 1100) and testing (n ~= 1400) datasets (v2).
+Implicit H-bond method is currently validated by explicit H-bond method using [PLINDER](https://www.plinder.sh/)  validation (n ~= 1100) and testing (n ~= 1400) datasets (v2).
 
 Here is the workflow to reproduce our validation:
-1. [Dataset preparation](#1-dataset-preparation)
-2. [Calculating H-bond interactions](#2-calculating-h-bond-interactions)
-3. [Setting the thresholds and testing](#3-setting-the-thresholds-for-the-implicit-h-bond-methods-using-plinder-validation-set-test-the-performance-on-plinder-testing-set)
+1. [Dataset preparation](#1-dataset-preparation).
+    > If you don't want to prepare the files yourself, we have data archive for the PLINDER validation and testing set [here](https://doi.org/10.5281/zenodo.16950708) or in [mirror archive](https://drive.google.com/drive/folders/1ZZ9zrzBI82vunOM4xmkiUtQX5Sm-eqND) (`plinder_protonated_systems.zip`).
+2. [Calculating H-bond interactions](#2-calculating-h-bond-interactions).
+    > We have precomputed data [here](https://doi.org/10.5281/zenodo.16950708) or in [mirror archive](https://drive.google.com/drive/folders/1ZZ9zrzBI82vunOM4xmkiUtQX5Sm-eqND) (Filenames: `plinder_val_fps.zip` and `plinder_test_fps.zip`. It is noted that some systems are unavailable due to the failure of reading the topology file.).
+3. [Setting the thresholds and testing](#3b-setting-the-thresholds-for-the-implicit-h-bond-methods-using-plinder-validation-set-test-the-performance-on-plinder-testing-set).
+    > If you are using the precomputed data, make sure the data are in the correct file path.
 
 ### 1. Dataset preparation
-First of all, the receptor (protein) and ligand will need to be downloaded to your local machine. Learn how to download the data from [PLINDER documentation](https://www.plinder.sh/).
+_You can skip this step if you use our data archive._
+First of all, the receptor (here, protein) and ligand will need to be downloaded to your local machine. Learn how to download the data from [PLINDER documentation](https://www.plinder.sh/).
 
-Then, receptors are protonated using PDB2PQR (PROPKA), and hydrogens are added to ligands using openbabel. You can simply run the below scripts:
+Then, receptors are protonated using `PDB2PQR` (`PROPKA`), and hydrogens are added to ligands using openbabel. You can simply run the below scripts:
 ```bash
 cd validation
 
 uv run python plinder_dataset_protonate.py # for the PLINDER validation/test set
+# will take ~3 hrs using one thread
 ```
 Note that if you want to protonate your structures in the validation set, please modify the path of dataframe in `plinder_dataset_protonate.py`. For example:
 ```python
@@ -23,11 +28,12 @@ df = pd.read_csv("./data/plinder_val_systems.csv") # PLINDER validation set
 
 ...
 ```
-It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing PDB2PQR with reduce (see details in [Troubleshooting - Dataset preparation](#plinderpinder-dataset-preparation-protonation)).
+It is noted that the dataset preparation might face a couple of issues, we dealt with those issues by either slightly modifying topology or replacing `PDB2PQR` with `reduce` (another software to add hydrogens) (see details in [Troubleshooting - Dataset preparation](#plinderpinder-dataset-preparation-protonation)).
 
 Once the dataset preparation finished, you can follow our steps to compute the H-bond interactions using implicit and explicit methods.
 
 ### 2. Calculating H-bond interactions
+_You can skip this step if you use our data archive._
 ```bash
 cd validation
 
@@ -37,26 +43,38 @@ mkdir -p ./test/explicit
 mkdir -p ./test/implicit
 
 uv run python plinder_dataset_fp_calculation.py # for the PLINDER validation set
+# will take ~3 hrs using one thread
 uv run python plinder_dataset_fp_calculation_for_testing.py # for the PLINDER testing set
+# will take ~3 hrs using one thread
 ```
+### 3a. One example from the PLINDER dataset for calculating the implciit and explicit H-bond interactions 
+* Please looks at [this notebook](./plinder_dataset_validation_single.ipynb). This notebook is 80% simlar to the [simple example](../implicit_vs_explicit.ipynb). The only difference is that we demonstrate how to calculate H-bond interactions if the protein interacting with multiple ligands (basically, iteratively load the ligand and calculate fingerprints in sequence).  
 
-### 3. Setting the thresholds for the implicit H-bond methods using PLINDER validation set (test the performance on PLINDER testing set)
-* Decide the thresholds: The comparison and analyses are performed in [this jupyter notebook](./plinder_dataset_validation.ipynb) (Batch analysis).
-* Test the performance if applying new thresholds: See [this notebook](./plinder_dataset_test.ipynb).
+### 3b. Setting the thresholds for the implicit H-bond methods using PLINDER validation set (test the performance on PLINDER testing set)
+_If you use our data archive, please make sure the file path is correct._
+* To decide the thresholds (for `acceptor/donor atom angles' deviation`, `acceptor/donor plane angles`, and `autodock_vina_hbond_potential` rescaling factors), we performed the comparison and analyses in [this jupyter notebook](./plinder_dataset_validation.ipynb).
+* Test the performance when applying new thresholds: please see [this notebook](./plinder_dataset_test.ipynb).
 
 
-## Validation with PINDER dataset
-Similar to the validation with PLINDER dataset, we followed the same protocols.
+## Validation with PINDER dataset (protein-protein interaction)
+Similar to the validation with PLINDER dataset, we followed a similar protocol using [PINDER](https://www.pinder.sh/) dataset (2024-02).
+
 ### 1. Dataset preparation
+Considering it is a protein-protein dataset, it is no need to use openbabel to add hydrogens. We used `PDB2PQR` (`PROPKA`) and `reduce` to prepare the structures.
+
+If you don't want to prepare the files yourself, we have data archive for the PINDER validation and testing set [here](https://doi.org/10.5281/zenodo.16950708) or in [mirror archive](https://drive.google.com/drive/folders/1ZZ9zrzBI82vunOM4xmkiUtQX5Sm-eqND) (`pinder_protonated_pdbs.zip`). 
 ```bash
 cd validation
 
 uv run python pinder_dataset_protonate.py # for the PINDER validation set
+# will take ~3 hrs using one thread
 uv run python pinder_dataset_protonate_for_testing.py # for the PINDER testing set
+# will take ~3 hrs using one thread
 ```
 
 
 ### 2. Calculating H-bond interactions
+You can skip this step if using our precomputed data, which can be found [here](https://doi.org/10.5281/zenodo.16950708) or in [mirror archive](https://drive.google.com/drive/folders/1ZZ9zrzBI82vunOM4xmkiUtQX5Sm-eqND) (Filenames: `pinder_val_fps.zip` and `pinder_test_fps.zip`. It is noted that some systems are unavailable due to the failure of reading the topology file.).
 ```bash
 cd validation
 
@@ -67,12 +85,15 @@ mkdir -p ./pinder_test/explicit
 mkdir -p ./pinder_test/implicit
 
 uv run python pinder_dataset_fp_calculation.py # for the PINDER validation set
+# will take ~3 hrs using one thread
 uv run python pinder_dataset_fp_calculation_for_testing.py # for the PINDER testing set
+# will take ~3 hrs using one thread
 ```
 
 ### 3. Setting the thresholds for the implicit H-bond methods using PINDER validation set (test the performance on PINDER testing set)
-* Decide the thresholds: The comparison and analyses are performed in [this jupyter notebook](./pinder_dataset_validation.ipynb) (Batch analysis).
-* Test the performance if applying new thresholds: See [this notebook](./pinder_dataset_test.ipynb).
+_If you are using the precomputed data, make sure the data are in the correct file path._
+* To decide the thresholds, we performed the simliar analyeses using PLINDE validation set in [this jupyter notebook](./pinder_dataset_validation.ipynb).
+* To test the performance when applying new thresholds: please look at [this notebook](./pinder_dataset_test.ipynb).
 
 
 
