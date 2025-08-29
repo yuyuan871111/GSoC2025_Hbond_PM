@@ -3,7 +3,9 @@ name = "gsoc2025-hbond-pm"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
+    "furo>=2023.3.27",
     "gemmi>=0.7.3",
+    "myst-nb>=1.3.0",
     "openbabel-wheel>=3.1.1.22",
     "pdb2pqr>=3.6.2",
     "pinder>=0.5.0",
@@ -13,6 +15,9 @@ dependencies = [
     "propka>=3.5.1",
     "py3dmol>=2.5.1",
     "ruff>=0.12.7",
+    "sphinx>=5.3.0",
+    "sphinx-autobuild>=2024.10.3",
+    "sphinx-copybutton>=0.5.2",
 ]
 
 [tool.uv.sources]
@@ -45,14 +50,15 @@ cmd = "ruff check --preview --fix"
 help = "Fixes formatting and linting issues"
 sequence = [{ ref = "format" }, { ref = "lint" }]
 
-[tool.poe.tasks.type-check]
-help = "Run mypy to check type hints across the codebase"
-cmd = "mypy ${FILE_PATHS}"
-args = [{ name = "FILE_PATHS", positional = true, multiple = true, default = "." }]
-
 [tool.poe.tasks.test]
 help = "Runs the test suite"
 cmd = "pytest"
+
+[tool.poe.tasks.build-doc-dev]
+help = "Builds the documentation (development)"
+sequence = [ 
+    { cmd = "sphinx-autobuild docs/source docs/autobuild" },
+]
 
 [tool.ruff]
 extend-exclude = [
@@ -61,6 +67,7 @@ extend-exclude = [
     ".vscode",
     "build",
     "site-packages",
+    "conf.py"
 ]
 
 [tool.ruff.lint]

@@ -12,8 +12,9 @@ Project outline: [link](https://summerofcode.withgoogle.com/programs/2025/projec
 
 
 ## Environment installation 
-Recommended Python:  3.11 or above
-Prerequirement: The python packages are managed with [uv](https://docs.astral.sh/uv/). Please follow the official guide to install `uv`.
+Prerequisite: 
+* Recommended Python: 3.11 or above.    
+* The python packages are managed with [uv](https://docs.astral.sh/uv/). Please follow the official guide to install `uv`.
 
 Once `uv` is installed, you can clone our repository and synchronize the environment with below code:
 ```bash
