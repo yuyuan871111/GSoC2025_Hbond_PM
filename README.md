@@ -27,7 +27,7 @@ uv sync --python 3.11
 ## Quick start
 We have three easy cases to demonstrate how to use our `ProteinHelper` and `ImplicitHBDonor/ImplicitHBAcceptor`.   
 
-1. Parse PDB files with non-standard residues with `ProteinHelper`: [notebook](parse_pdn_files.ipynb).
+1. Parse PDB files with non-standard residues with `ProteinHelper`: [notebook](parse_pdb_files.ipynb).
 
 2. Compare the experimental and computational structures using `ImplicitHBDonor/ImplicitHBAcceptor`: [notebook](comp_vs_exp.ipynb).
 

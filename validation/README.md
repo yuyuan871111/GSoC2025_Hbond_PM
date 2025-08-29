@@ -52,8 +52,8 @@ uv run python plinder_dataset_fp_calculation_for_testing.py # for the PLINDER te
 
 ### 3b. Setting the thresholds for the implicit H-bond methods using PLINDER validation set (test the performance on PLINDER testing set)
 _If you use our data archive, please make sure the file path is correct._
-* To decide the thresholds (for `acceptor/donor atom angles' deviation`, `acceptor/donor plane angles`, and `autodock_vina_hbond_potential` rescaling factors), we performed the comparison and analyses in [this jupyter notebook](./plinder_dataset_validation.ipynb).
-* Test the performance when applying new thresholds: please see [this notebook](./plinder_dataset_test.ipynb).
+* To decide the thresholds (for `acceptor/donor atom angles' deviation`, `acceptor/donor plane angles`, and `autodock_vina_hbond_potential` rescaling factors), we performed the comparison and analyses in [this notebook](./plinder_dataset_validation.ipynb).
+* To test the performance when applying new thresholds, please see [this notebook](./plinder_dataset_test.ipynb).
 
 
 ## Validation with PINDER dataset (protein-protein interaction)
@@ -92,8 +92,8 @@ uv run python pinder_dataset_fp_calculation_for_testing.py # for the PINDER test
 
 ### 3. Setting the thresholds for the implicit H-bond methods using PINDER validation set (test the performance on PINDER testing set)
 _If you are using the precomputed data, make sure the data are in the correct file path._
-* To decide the thresholds, we performed the simliar analyeses using PLINDE validation set in [this jupyter notebook](./pinder_dataset_validation.ipynb).
-* To test the performance when applying new thresholds: please look at [this notebook](./pinder_dataset_test.ipynb).
+* To decide the thresholds, we performed the simliar analyeses using PINDER validation set in [this notebook](./pinder_dataset_validation.ipynb).
+* To test the performance when applying new thresholds, please look at [this notebook](./pinder_dataset_test.ipynb).
 
 
 
