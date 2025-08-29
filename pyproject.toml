@@ -54,6 +54,10 @@ sequence = [{ ref = "format" }, { ref = "lint" }]
 help = "Runs the test suite"
 cmd = "pytest"
 
+[tool.poe.tasks.build-doc]
+help = "Builds the documentation"
+cmd = "sphinx-build -b html docs/source docs/build"
+
 [tool.poe.tasks.build-doc-dev]
 help = "Builds the documentation (development)"
 sequence = [ 
