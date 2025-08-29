@@ -1,7 +1,10 @@
-# Project Management repository for GSoC 2025 - MDAnalysis x ProLIF Project 5: H-Bond interactions from implicit hydrogens
+# GSoC 2025 - MDAnalysis x ProLIF Project 5: H-Bond interactions from implicit hydrogens
+Originally, it is a project management repository for **GSoC 2025 - MDAnalysis x ProLIF Project 5: H-Bond interactions from implicit hydrogens**. Now, it becomes an user guide for calculating H-bond interactions with implicit hydrogens.
 
 Contributor: Yu-Yuan (Stuart) Yang ([@yuyuan871111](https://github.com/yuyuan871111))     
+
 Mentors: Cédric Bouysset ([@cbouy](https://github.com/cbouy), [@cbouysset](https://github.com/cbouysset)), Valerij Talagayev ([@talagayev](https://github.com/talagayev))     
+
 Organization: [MDAnalysis](https://www.mdanalysis.org/)   
 
 Project outline: [link](https://summerofcode.withgoogle.com/programs/2025/projects/5Otkx8vp)
@@ -26,11 +29,13 @@ uv sync --python 3.11
 ```
 
 ## Quick start
+Please look at our documentation [here](https://mdanalysis-x-prolif-project-5-implicit-h-bond-interactions.readthedocs.io/en/latest/index.html).
+
 We have three easy cases to demonstrate how to use our `ProteinHelper` and `ImplicitHBDonor/ImplicitHBAcceptor`.   
 
-1. Parse PDB files with non-standard residues with `ProteinHelper`: [notebook](parse_pdb_files.ipynb).
+1. Parse PDB files with non-standard residues with `ProteinHelper`: [notebook](https://mdanalysis-x-prolif-project-5-implicit-h-bond-interactions.readthedocs.io/en/latest/notebooks/parse_pdb_files.html).
 
-2. Compare the experimental and computational structures using `ImplicitHBDonor/ImplicitHBAcceptor`: [notebook](comp_vs_exp.ipynb).
+2. Compare the experimental and computational structures using `ImplicitHBDonor/ImplicitHBAcceptor`: [notebook](https://mdanalysis-x-prolif-project-5-implicit-h-bond-interactions.readthedocs.io/en/latest/notebooks/comp_vs_exp.html).
 
-3. Validate the implicit H-bond method with the explicit H-bond method: [notebook](implicit_vs_explicit.ipynb).
-    > For more analyses for the method validation, you will need to download PLINDER and PINDER dataset and prepare the protonated structures. See [here](./validation/README.md) for details.
+3. Validate the implicit H-bond method with the explicit H-bond method: [notebook](https://mdanalysis-x-prolif-project-5-implicit-h-bond-interactions.readthedocs.io/en/latest/notebooks/implicit_vs_explicit.html).
+    > For more analyses for the method validation, you will need to download PLINDER and PINDER dataset and prepare the protonated structures. See [here](https://github.com/yuyuan871111/GSoC2025_Hbond_PM/tree/main/validation#validation-with-plinder-dataset) for details.
