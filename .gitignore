@@ -7,6 +7,8 @@ config.cfg
 # cache
 *.pyc
 __pycache__
+autobuild/
+jupyter_execute/
 
 # logs
 *.log
